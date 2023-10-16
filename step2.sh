@@ -16,8 +16,9 @@ done
 rm -rf all_the_summary
 mkdir -p all_the_summary
 
-#change the name of summary.txt and output it to all_the_summary directory
+#rename the summary.txt using the sequence name and output it to all_the_summary directory
 for folder in fastqc_unzipped/*fastqc;do
-foldername=${$folder/_fastqc/} #definate a foldername delete the filename (_fastqc) part
+foldername=$(basename $folder _fastqc) #definate a foldername delete the filename (_fastqc) part
 mv $folder/summary.txt all_the_summary/"$foldername"_summary.txt #add the name of every summary.txt with its sequence name and output them to a directory called all_the_summary
 done
+
