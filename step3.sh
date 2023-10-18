@@ -7,62 +7,17 @@ cp -r /localdisk/data/BPSM/ICA1/Tcongo_genome .
 
 #buid a bowtie2 index
 rm -rf *index*
-bowtie2-build Tcongo_genome Tco_example_index
+bowtie2-build Tcongo_genome/*fasta.gz Tcongo_genome/Tcongo_genome_index
 
 
-rm -rf Tco_1_fastq
-mkdir -p Tco_1_fastq
-cp fastq/*_1.fq.gz Tco_1_fastq
+rm -rf Tco_alignment_sam
+mkdir Tco_alignment_sam
 
-rm -rf Tco_2_fastq
-mkdir -p Tco_2_fastq
-cp fastq/*_2.fq.gz Tco_2_fastq
+for fqfile in fastq/*_1.fq.gz;do 		#fqfile = fastq/Tco-999_1.fq.gz
+	name1=$(basename $fqfile) 			#Tco-999_1.fq.gz
+	name2=${name1/_1.fq.gz/_2.fq.gz}	#Tco-999_2.fq.gz
+	outname=${name1/_1.fq.gz/.sam}		#Tco-999.sam
 
-
-
-
-
-
-
-
-
-
-for example_1_fastq in Tco_1_fastq/*_1.fq.gz;do
-example_2_fastq="Tco_2_fastq/*_2.fq.gz"
-bowtie2 --end-to-end -p 6 -x Tco_example_index -1 $example_1_fastq -2 $example_2_fastq -S Tco_alignment.sam
+	bowtie2 -x Tcongo_genome/Tcongo_genome_index -1 fastq/"$name1"  -2 fastq/"$name2"  -S Tco_alignment_sam/"$outname"
+	#echo "1" #debugging
 done
-
-rm -rf Tco_alignment.sam
-mkdir Tco_alignment.sam
-
-for example_1_fastq in Tco_1_fastq/*_1.fq.gz;do
-example_2_fastq=${example_1_fastq/_1.fq.gz/_2.fq.gz}
-bowtie2 --end-to-end -p 6 -x Tco_example_index -1 $example_1_fastq -2 $example_2_fastq -S Tco_alignment.sam
-done
-
-
-for file in Tco_1_fastq；do
-bowtie
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#change the format into "BAM"
-samtools sort example.sam > example.bam
-
-
-
-
-
-
-
