@@ -21,3 +21,13 @@ for folder in fastqc_unzipped/*fastqc;do
 foldername=$(basename $folder _fastqc) #definate a foldername delete the filename (_fastqc) part
 mv $folder/summary.txt all_the_summary/"$foldername"_summary.txt #add the name of every summary.txt with its sequence name and output them to a directory called all_the_summary
 done
+#drag all the summary into a new file for quality assesment
+
+rm -f test.tsv
+IFS=$'\t'
+for summary in all_the_summary/*summary.txt;do
+	read -n1 -i $summary
+	if test ${line}="PASS"
+	then
+	echo -e "${colum3}" >> ${line}{colum2}.tsv
+done < $summary
