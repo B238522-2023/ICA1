@@ -20,3 +20,13 @@ for fqfile in fastq/*_1.fq.gz;do
 
 	bowtie2 -p 6 -x Tcongo_genome/Tcongo_genome_index -1 fastq/"$name1"  -2 fastq/"$name2"  -S Tco_alignment_sam/"$outname"
 done
+
+#change the format into "BAM"
+rm -rf Tco_alignment_bam
+mkdir -p Tco_alignment_bam
+
+for samfile in Tco_alignment_sam/*.sam;do      #Tco-999.sam
+	inputname=$(basename $samfile)
+	outputname=${inputname/.sam/.bam}
+	samtools view -S Tco_alignment_sam/"$inputname" -b -o Tco_alignment_bam/"$outputname"
+done
