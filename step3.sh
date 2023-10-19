@@ -34,18 +34,12 @@ done
 #check the output bam files
 samtools quickcheck Tco_alignment_bam/*.bam 
 
-#sort the bam files
+#sort the bam files and make an index
 rm -rf Tco_sort
 mkdir -p Tco_sort
 for bamfiles in Tco_alignment_bam/*.bam;do
 	file=$(basename $bamfiles)
-	sortfile=${file/.bam/_sort}
+	sortfile=${file/.bam/_sort.bam}
     samtools sort -@ 10 Tco_alignment_bam/$file -o Tco_sort/"$sortfile"
-done
-
-
-#make an index using samtools
-for sortfile in Tco_sort/*sort;do
-	file=${sortfile}
-	samtools index "$file"
+    samtools index Tco_sort/"$sortfile"
 done
