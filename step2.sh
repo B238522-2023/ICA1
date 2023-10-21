@@ -23,11 +23,13 @@ mv $folder/summary.txt all_the_summary/"$foldername"_summary.txt #add the name o
 done
 #drag all the summary into a new file for quality assesment
 
-rm -f test.tsv
-IFS=$'\t'
-for summary in all_the_summary/*summary.txt;do
-	read -n1 -i $summary
-	if test ${line}="PASS"
+#asses the quality of summary.txt,echo the number of 'PASS' of each file
+count=0
+for file in all_the_summary/*.txt
+do
+	count=$(grep -c "PASS" $file)
+	if test $count -gt 5
 	then
-	echo -e "${colum3}" >> ${line}{colum2}.tsv
-done < $summary
+		echo -e "The number of PASS in $file is $count"
+	fi
+done 
