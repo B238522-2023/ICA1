@@ -13,12 +13,12 @@ bowtie2-build Tcongo_genome/*fasta.gz Tcongo_genome/Tcongo_genome_index
 rm -rf Tco_alignment_sam
 mkdir Tco_alignment_sam
 
+#align the same-name gene one by one and output as the sam format
 for fqfile in fastq/*_1.fq.gz;do 		
-	name1=$(basename $fqfile) 	
-	name2=${name1/_1.fq.gz/_2.fq.gz}
-	outname=${name1/_1.fq.gz/.sam}		
-
-	bowtie2 -p 6 -x Tcongo_genome/Tcongo_genome_index -1 fastq/"$name1"  -2 fastq/"$name2"  -S Tco_alignment_sam/"$outname"
+	name1=$(basename $fqfile)			
+	name2=${name1/_1.fq.gz/_2.fq.gz}	
+	outputname=${name1/_1.fq.gz/.sam}	
+	bowtie2 -p 6 -x Tcongo_genome/Tcongo_genome_index -1 fastq/"$name1"  -2 fastq/"$name2"  -S Tco_alignment_sam/"$outputname"
 done
 
 #change the format into "BAM"
@@ -40,6 +40,6 @@ mkdir -p Tco_sort
 for bamfiles in Tco_alignment_bam/*.bam;do
 	file=$(basename $bamfiles)
 	sortfile=${file/.bam/_sort.bam}
-    samtools sort -@ 10 Tco_alignment_bam/$file -o Tco_sort/"$sortfile"
+    samtools sort -@ 10 Tco_alignment_bam/"$file" -o Tco_sort/"$sortfile"
     samtools index Tco_sort/"$sortfile"
 done

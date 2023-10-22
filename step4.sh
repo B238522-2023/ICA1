@@ -11,11 +11,7 @@ for bamfile in Tco_sort/*.bam;do
 done 
 
 rm -rf groupfile
-mkdir groupfile
-#sort the gene in txt for further grouping
-cat fastq/Tco2.fqfiles | grep -v "SampleName" | sort -k2,2 -k4,4n -k5,5 | cut -f 1,2,4,5 >> groupfile/groupfile.txt
-
-rm -rf groupfile/groupfile.txt
+mkdir -p groupfile
 #grouping the genes in Tco_sort directory according to their type,name,time,treatment
 while read -r line;do
 	SampleName=$(echo "$line" | awk -F'\t' '{print$1}')
